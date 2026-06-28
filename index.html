@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>eHotel Ethiopia — Discover Addis Ababa's Finest Hotels</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0F1B2D;
+    --navy-light: #1A2E47;
+    --ivory: #F7F3EE;
+    --ivory-dark: #EDE8E1;
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --green: #2E7D32;
+    --yellow: #F9A825;
+    --red: #C62828;
+    --slate: #6B7C93;
+    --white: #FFFFFF;
+    --radius: 12px;
+    --shadow: 0 8px 32px rgba(15,27,45,0.13);
+    --shadow-hover: 0 20px 52px rgba(15,27,45,0.22);
+    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--ivory); color: var(--navy); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,27,45,0.97); backdrop-filter: blur(14px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 70px;
+    border-bottom: 1px solid rgba(201,168,76,0.18);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
+  .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 1.55rem; font-weight: 700; color: var(--white); letter-spacing: -0.3px; }
+  .nav-logo-text span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a { color: rgba(255,255,255,0.72); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.3px; transition: color var(--transition); }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-badge { background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); color: var(--gold); font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 20px; letter-spacing: 0.8px; text-transform: uppercase; margin-left: auto; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: white; border-radius: 2px; }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center;
+    background: linear-gradient(160deg, #0a1520 0%, #0F1B2D 55%, #0a1f0a 100%);
+    position: relative; overflow: hidden; padding-top: 70px;
+  }
+  .hero-flag-stripe-green { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--green); }
+  .hero-flag-stripe-yellow { position: absolute; bottom: 4px; left: 0; right: 0; height: 4px; background: var(--yellow); }
+  .hero-flag-stripe-red { position: absolute; bottom: 8px; left: 0; right: 0; height: 4px; background: var(--red); }
+  .hero-bg-grid {
+    position: absolute; inset: 0; opacity: 0.03;
+    background-image: linear-gradient(rgba(201,168,76,1) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,1) 1px,transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-glow { position: absolute; width: 700px; height: 700px; background: radial-gradient(circle, rgba(46,125,50,0.08) 0%, rgba(201,168,76,0.06) 40%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+  .hero-content { position: relative; z-index: 2; max-width: 820px; padding: 2rem 1.5rem; }
+  .hero-eyebrow { font-size: 0.78rem; font-weight: 600; letter-spacing: 3.5px; color: var(--gold); text-transform: uppercase; margin-bottom: 1.75rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
+  .hero-eyebrow::before,.hero-eyebrow::after { content:''; width: 40px; height: 1px; background: rgba(201,168,76,0.4); }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 4.8rem); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 1.5rem; }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-title .eth { color: #4CAF50; }
+  .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.55); line-height: 1.75; margin-bottom: 2.5rem; font-weight: 300; max-width: 540px; margin-left: auto; margin-right: auto; }
+  .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.3rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all var(--transition); border: none; text-decoration: none; font-family: 'Inter', sans-serif; }
+  .btn-gold { background: var(--gold); color: var(--navy); }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,168,76,0.35); }
+  .btn-outline-white { background: transparent; border: 1.5px solid rgba(255,255,255,0.25); color: var(--white); }
+  .btn-outline-white:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-navy { background: var(--navy); color: var(--white); }
+  .btn-navy:hover { background: var(--navy-light); }
+  .btn-green { background: var(--green); color: var(--white); }
+  .btn-green:hover { background: #388E3C; transform: translateY(-1px); }
+  .btn-lg { padding: 0.9rem 2.1rem; font-size: 1rem; border-radius: 10px; }
+  .btn-sm { padding: 0.42rem 0.95rem; font-size: 0.78rem; border-radius: 7px; }
+  .scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.3); font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; z-index: 2; }
+  .scroll-arrow { width: 18px; height: 18px; border-right: 1.5px solid rgba(255,255,255,0.25); border-bottom: 1.5px solid rgba(255,255,255,0.25); transform: rotate(45deg); animation: bounce 1.8s ease-in-out infinite; }
+  @keyframes bounce { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(6px)} }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 5%; }
+  .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 3.5px; color: var(--gold); text-transform: uppercase; margin-bottom: 0.75rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.7rem); font-weight: 700; color: var(--navy); margin-bottom: 1rem; line-height: 1.2; }
+  .section-sub { font-size: 0.97rem; color: var(--slate); line-height: 1.75; max-width: 560px; }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+
+  /* ── SEARCH ── */
+  .search-bar { background: var(--white); border-radius: 14px; padding: 1rem 1.3rem; display: flex; gap: 0.75rem; align-items: center; box-shadow: var(--shadow); margin-bottom: 2.5rem; border: 1.5px solid var(--ivory-dark); }
+  .search-bar input { flex: 1; border: none; outline: none; font-size: 0.95rem; font-family: 'Inter', sans-serif; color: var(--navy); background: transparent; }
+  .search-bar input::placeholder { color: var(--slate); }
+  .filter-chips { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .chip { padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1.5px solid var(--ivory-dark); background: var(--white); color: var(--slate); transition: all var(--transition); }
+  .chip.active, .chip:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+  /* ── HOTEL CARDS ── */
+  #hotels { background: var(--ivory); }
+  .hotels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.75rem; }
+  .hotel-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 16px rgba(15,27,45,0.07); transition: all var(--transition); cursor: pointer; }
+  .hotel-card:hover { transform: translateY(-7px); box-shadow: var(--shadow-hover); }
+  .hotel-img-wrap { overflow: hidden; position: relative; }
+  .hotel-card-img { width: 100%; height: 215px; object-fit: cover; display: block; transition: transform 0.55s ease; }
+  .hotel-card:hover .hotel-card-img { transform: scale(1.05); }
+  .hotel-badge { position: absolute; top: 0.75rem; left: 0.75rem; font-size: 0.7rem; font-weight: 700; padding: 0.28rem 0.65rem; border-radius: 20px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .badge-luxury { background: var(--navy); color: var(--gold); }
+  .badge-business { background: var(--green); color: var(--white); }
+  .badge-boutique { background: #7B1FA2; color: var(--white); }
+  .badge-airport { background: #1565C0; color: var(--white); }
+  .stars-wrap { position: absolute; bottom: 0.75rem; right: 0.75rem; background: rgba(0,0,0,0.55); backdrop-filter: blur(4px); color: #FFD700; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; }
+  .hotel-card-body { padding: 1.3rem; }
+  .hotel-name { font-family: 'Playfair Display', serif; font-size: 1.18rem; font-weight: 700; color: var(--navy); margin-bottom: 0.35rem; line-height: 1.3; }
+  .hotel-location { font-size: 0.81rem; color: var(--slate); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.3rem; }
+  .hotel-desc-preview { font-size: 0.83rem; color: var(--slate); line-height: 1.6; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .hotel-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 0.85rem; border-top: 1px solid var(--ivory-dark); }
+  .hotel-price { font-size: 0.8rem; color: var(--slate); }
+  .hotel-price strong { font-size: 1.05rem; color: var(--navy); font-weight: 700; }
+  .hotel-price sup { font-size: 0.72rem; }
+  .card-actions { display: flex; gap: 0.5rem; }
+
+  /* ── ABOUT ── */
+  #about { background: var(--navy); }
+  #about .section-title { color: var(--white); }
+  #about .section-sub { color: rgba(255,255,255,0.55); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5rem; align-items: center; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2.5rem; }
+  .stat-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.15); border-radius: var(--radius); padding: 1.4rem; transition: background var(--transition); }
+  .stat-card:hover { background: rgba(255,255,255,0.08); }
+  .stat-number { font-family: 'Playfair Display', serif; font-size: 2.1rem; font-weight: 700; color: var(--gold); line-height: 1; }
+  .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-top: 0.3rem; }
+  .about-features { display: flex; flex-direction: column; gap: 1.4rem; }
+  .feature-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .feature-icon { width: 44px; height: 44px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+  .feature-text h4 { color: var(--white); font-size: 0.92rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .feature-text p { color: rgba(255,255,255,0.45); font-size: 0.82rem; line-height: 1.65; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--ivory-dark); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2rem; }
+  .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .contact-icon { width: 44px; height: 44px; background: var(--navy); color: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .contact-item-text h4 { font-weight: 600; font-size: 0.88rem; margin-bottom: 0.2rem; color: var(--navy); }
+  .contact-item-text p { font-size: 0.83rem; color: var(--slate); line-height: 1.5; }
+  .contact-form { background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); }
+  .contact-form h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1.5rem; color: var(--navy); }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--navy); margin-bottom: 0.38rem; letter-spacing: 0.3px; }
+  .form-control { width: 100%; padding: 0.68rem 1rem; border: 1.5px solid var(--ivory-dark); border-radius: 8px; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: var(--navy); outline: none; transition: border-color var(--transition); background: var(--ivory); }
+  .form-control:focus { border-color: var(--gold); background: var(--white); }
+  .form-control.textarea { resize: vertical; min-height: 100px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+  /* ── FOOTER ── */
+  footer { background: #070f1a; padding: 3.5rem 5% 1.75rem; }
+  .footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); margin-bottom: 1.75rem; }
+  .footer-brand p { color: rgba(255,255,255,0.38); font-size: 0.83rem; margin-top: 0.75rem; line-height: 1.75; max-width: 260px; }
+  .footer-col h4 { color: var(--gold); font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.1rem; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .footer-col ul li a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.83rem; transition: color var(--transition); cursor: pointer; }
+  .footer-col ul li a:hover { color: var(--gold); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-bottom p { color: rgba(255,255,255,0.25); font-size: 0.78rem; }
+  .eth-flag { display: inline-flex; gap: 3px; align-items: center; margin-left: 0.5rem; }
+  .eth-flag span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── HOTEL DETAIL MODAL ── */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(5,12,22,0.82); z-index: 500; display: none; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(6px); }
+  .modal-backdrop.active { display: flex; }
+  .modal { background: var(--white); border-radius: 18px; width: 100%; position: relative; animation: modalIn 0.32s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes modalIn { from{opacity:0;transform:scale(0.91) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+  .hotel-modal { max-width: 700px; max-height: 92vh; overflow-y: auto; }
+  .hotel-modal-img-wrap { position: relative; }
+  .hotel-modal-img { width: 100%; height: 260px; object-fit: cover; display: block; border-radius: 18px 18px 0 0; }
+  .hotel-modal-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%); border-radius: 18px 18px 0 0; }
+  .hotel-modal-close { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.92); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; color: var(--navy); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: all var(--transition); z-index: 10; }
+  .hotel-modal-close:hover { background: var(--white); transform: scale(1.08); }
+  .hotel-modal-body { padding: 1.75rem 2rem 2rem; }
+  .hotel-modal-stars { color: #F9A825; font-size: 0.95rem; margin-bottom: 0.35rem; letter-spacing: 1px; }
+  .hotel-modal-title { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 0.5rem; }
+  .hotel-modal-location { font-size: 0.86rem; color: var(--slate); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.4rem; }
+  .hotel-modal-desc { font-size: 0.91rem; color: #4A5568; line-height: 1.8; margin-bottom: 1.5rem; }
+  .modal-section { margin-bottom: 1.75rem; }
+  .modal-section-title { font-size: 0.78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--navy); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1.5px solid var(--ivory-dark); display: flex; align-items: center; gap: 0.4rem; }
+  .price-table { width: 100%; border-collapse: collapse; }
+  .price-table th { text-align: left; font-size: 0.75rem; color: var(--slate); font-weight: 600; padding: 0.5rem 0.75rem; background: var(--ivory); letter-spacing: 0.5px; text-transform: uppercase; }
+  .price-table th:last-child { text-align: right; }
+  .price-table td { padding: 0.7rem 0.75rem; font-size: 0.87rem; color: var(--navy); border-bottom: 1px solid var(--ivory); }
+  .price-table td:last-child { font-weight: 700; color: var(--green); text-align: right; }
+  .price-table tr:last-child td { border-bottom: none; }
+  .price-table tr:hover td { background: var(--ivory); }
+  .amenity-tag { background: var(--ivory); padding: 0.32rem 0.72rem; border-radius: 20px; font-size: 0.76rem; color: var(--navy); font-weight: 500; display: inline-block; margin: 0.2rem; }
+  .hotel-modal-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; padding-top: 1.5rem; border-top: 1px solid var(--ivory-dark); }
+
+  /* ── TOAST ── */
+  #toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
+  .toast-item { background: var(--navy); color: var(--white); padding: 0.85rem 1.25rem; border-radius: 10px; font-size: 0.875rem; display: flex; align-items: center; gap: 0.6rem; box-shadow: var(--shadow); animation: toastIn 0.35s ease; max-width: 320px; border-left: 3px solid var(--gold); }
+  @keyframes toastIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+
+  /* ── MOBILE ── */
+  .mobile-menu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: var(--navy); padding: 1.5rem 5%; z-index: 99; border-bottom: 1px solid rgba(201,168,76,0.15); }
+  .mobile-menu.open { display: flex; flex-direction: column; gap: 0.75rem; }
+  .mobile-menu a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.97rem; padding: 0.65rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: block; }
+
+  @media (max-width: 900px) {
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: 1/-1; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-badge { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 4rem 5%; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hotel-modal-body { padding: 1.25rem 1.25rem 1.5rem; }
+    .hotel-modal-actions { flex-direction: column; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="#home">
+    <!-- eHotel SVG Logo -->
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="38" height="38" rx="10" fill="#C9A84C"/>
+      <!-- Hotel building silhouette -->
+      <rect x="7" y="14" width="24" height="17" rx="1.5" fill="#0F1B2D"/>
+      <rect x="10" y="11" width="18" height="5" rx="1" fill="#0F1B2D"/>
+      <rect x="13" y="8" width="12" height="4" rx="1" fill="#0F1B2D"/>
+      <!-- Windows -->
+      <rect x="10" y="17" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+      <rect x="17" y="17" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+      <rect x="24" y="17" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+      <rect x="10" y="23" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+      <rect x="24" y="23" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+      <!-- Door -->
+      <rect x="16" y="23" width="6" height="8" rx="1" fill="#C9A84C"/>
+      <!-- Star on top -->
+      <path d="M19 6L19.5 7.5H21L19.8 8.4L20.2 10L19 9.1L17.8 10L18.2 8.4L17 7.5H18.5L19 6Z" fill="#C9A84C"/>
+      <!-- Ethiopian colors bottom stripe -->
+      <rect x="0" y="34" width="12.7" height="4" rx="0 0 0 10" fill="#2E7D32"/>
+      <rect x="12.7" y="34" width="12.6" height="4" fill="#F9A825"/>
+      <rect x="25.3" y="34" width="12.7" height="4" rx="0 0 10 0" fill="#C62828"/>
+    </svg>
+    <div class="nav-logo-text">e<span>Hotel</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="#hotels">Hotels</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <span class="nav-badge">🇪🇹 Addis Ababa</span>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hotels" onclick="closeMenu()">🏨 Hotels</a>
+  <a href="#about" onclick="closeMenu()">ℹ️ About eHotel</a>
+  <a href="#contact" onclick="closeMenu()">📞 Contact</a>
+</div>
+
+<!-- ── HERO ── -->
+<section id="home">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Addis Ababa · Ethiopia · Africa</div>
+    <h1 class="hero-title">
+      Discover <em>Ethiopia's</em><br>Finest Hotels
+    </h1>
+    <p class="hero-sub">Your definitive guide to premium hotels in the heart of Addis Ababa. Real prices, real locations, real experiences.</p>
+    <div class="hero-actions">
+      <a href="#hotels" class="btn btn-gold btn-lg">Explore Hotels ↓</a>
+      <a href="#about" class="btn btn-outline-white btn-lg">About eHotel</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-arrow"></div></div>
+  <div class="hero-flag-stripe-red"></div>
+  <div class="hero-flag-stripe-yellow"></div>
+  <div class="hero-flag-stripe-green"></div>
+</section>
+
+<!-- ── HOTELS ── -->
+<section id="hotels">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Addis Ababa Collection</div>
+      <h2 class="section-title">Featured Hotels</h2>
+      <p class="section-sub">Handpicked hotels in Addis Ababa — from five-star luxury to smart business stays.</p>
+    </div>
+  </div>
+  <div class="search-bar">
+    <span style="color:var(--slate);font-size:1.1rem">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search hotel name or area (Bole, Kazanchis, Piassa…)" oninput="filterHotels()" />
+  </div>
+  <div class="filter-chips">
+    <span class="chip active" onclick="setFilter('all',this)">All</span>
+    <span class="chip" onclick="setFilter('luxury',this)">⭐ Luxury</span>
+    <span class="chip" onclick="setFilter('business',this)">💼 Business</span>
+    <span class="chip" onclick="setFilter('boutique',this)">🌿 Boutique</span>
+    <span class="chip" onclick="setFilter('airport',this)">✈️ Near Airport</span>
+  </div>
+  <div class="hotels-grid" id="hotelsGrid"></div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <div class="section-label">Who We Are</div>
+      <h2 class="section-title" style="color:var(--white)">Ethiopia's Trusted Hotel Directory</h2>
+      <p class="section-sub">eHotel was built to make finding great hotels in Addis Ababa effortless. We verify every listing, confirm real pricing, and link directly to each hotel's official website so you always get the full picture.</p>
+      <div class="about-stats">
+        <div class="stat-card"><div class="stat-number">50+</div><div class="stat-label">Verified Hotels</div></div>
+        <div class="stat-card"><div class="stat-number">12</div><div class="stat-label">City Districts</div></div>
+        <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Real Data</div></div>
+        <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Support</div></div>
+      </div>
+    </div>
+    <div class="about-features">
+      <div class="feature-item">
+        <div class="feature-icon">✅</div>
+        <div class="feature-text">
+          <h4>Verified Listings</h4>
+          <p>Every hotel is confirmed by our team. Photos, prices, and amenities are checked regularly to stay accurate.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🗺️</div>
+        <div class="feature-text">
+          <h4>Real Google Maps Links</h4>
+          <p>Each hotel links directly to its exact Google Maps pin so you can navigate there without confusion.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-text">
+          <h4>Direct to Official Websites</h4>
+          <p>No middlemen. We link straight to each hotel's official website for the most accurate booking information.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🇪🇹</div>
+        <div class="feature-text">
+          <h4>Ethiopia First</h4>
+          <p>Built specifically for Addis Ababa and Ethiopia — we understand the local hospitality landscape inside and out.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Get In Touch</div>
+      <h2 class="section-title">Contact eHotel</h2>
+      <p class="section-sub">Want to list your hotel, report outdated info, or need help? Reach out — we respond fast.</p>
+    </div>
+  </div>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-item-text">
+            <h4>Office</h4>
+            <p>Bole Road, Friendship Building<br>Addis Ababa, Ethiopia</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-item-text">
+            <h4>Phone</h4>
+            <p>+251 911 234 567<br>+251 116 183 000</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-item-text">
+            <h4>Email</h4>
+            <p>hello@ehotel.et<br>support@ehotel.et</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div class="contact-item-text">
+            <h4>Working Hours</h4>
+            <p>Mon–Sat: 8:00 AM – 8:00 PM EAT<br>Sunday: 10:00 AM – 4:00 PM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <h3>Send Us a Message</h3>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input class="form-control" type="text" placeholder="Abebe" /></div>
+        <div class="form-group"><label>Last Name</label><input class="form-control" type="text" placeholder="Kebede" /></div>
+      </div>
+      <div class="form-group"><label>Email</label><input class="form-control" type="email" placeholder="abebe@example.com" /></div>
+      <div class="form-group"><label>Subject</label><input class="form-control" type="text" placeholder="Hotel listing enquiry…" /></div>
+      <div class="form-group"><label>Message</label><textarea class="form-control textarea" placeholder="Tell us more…"></textarea></div>
+      <button class="btn btn-gold btn-lg" style="width:100%" onclick="submitContact()">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg width="34" height="34" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="38" height="38" rx="10" fill="#C9A84C"/>
+          <rect x="7" y="14" width="24" height="17" rx="1.5" fill="#0F1B2D"/>
+          <rect x="10" y="11" width="18" height="5" rx="1" fill="#0F1B2D"/>
+          <rect x="13" y="8" width="12" height="4" rx="1" fill="#0F1B2D"/>
+          <rect x="10" y="17" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+          <rect x="17" y="17" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+          <rect x="24" y="17" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+          <rect x="10" y="23" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+          <rect x="24" y="23" width="4" height="3" rx="0.5" fill="#C9A84C"/>
+          <rect x="16" y="23" width="6" height="8" rx="1" fill="#C9A84C"/>
+          <rect x="0" y="34" width="12.7" height="4" rx="0 0 0 10" fill="#2E7D32"/>
+          <rect x="12.7" y="34" width="12.6" height="4" fill="#F9A825"/>
+          <rect x="25.3" y="34" width="12.7" height="4" rx="0 0 10 0" fill="#C62828"/>
+        </svg>
+        <span style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--white)">e<span style="color:var(--gold)">Hotel</span></span>
+      </div>
+      <p>Ethiopia's trusted hotel discovery platform. Serving Addis Ababa and beyond.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#hotels">All Hotels</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Districts</h4>
+      <ul>
+        <li><a href="#hotels">Bole</a></li>
+        <li><a href="#hotels">Kazanchis</a></li>
+        <li><a href="#hotels">Piassa</a></li>
+        <li><a href="#hotels">Megenagna</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a>hello@ehotel.et</a></li>
+        <li><a>+251 911 234 567</a></li>
+        <li><a>Addis Ababa, ET</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 eHotel Ethiopia. All rights reserved. 🇪🇹</p>
+    <p style="color:rgba(255,255,255,0.2)">Made with ❤️ in Addis Ababa</p>
+  </div>
+</footer>
+
+<!-- ── HOTEL DETAIL MODAL ── -->
+<div class="modal-backdrop" id="hotelModal">
+  <div class="modal hotel-modal">
+    <div class="hotel-modal-img-wrap">
+      <img id="hm-img" class="hotel-modal-img" src="" alt="" />
+      <div class="hotel-modal-img-overlay"></div>
+      <button class="hotel-modal-close" onclick="closeModal('hotelModal')">✕</button>
+    </div>
+    <div class="hotel-modal-body">
+      <div class="hotel-modal-stars" id="hm-stars"></div>
+      <div class="hotel-modal-title" id="hm-name"></div>
+      <div class="hotel-modal-location">📍 <span id="hm-location"></span></div>
+      <p class="hotel-modal-desc" id="hm-desc"></p>
+
+      <div class="modal-section">
+        <div class="modal-section-title">🛏 Room & Service Pricing (ETB)</div>
+        <table class="price-table">
+          <thead><tr><th>Room / Service</th><th>Category</th><th>Price / Night</th></tr></thead>
+          <tbody id="hm-prices"></tbody>
+        </table>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">✨ Amenities & Services</div>
+        <div id="hm-amenities"></div>
+      </div>
+
+      <div class="hotel-modal-actions">
+        <a id="hm-website-btn" href="#" target="_blank" rel="noopener" class="btn btn-gold btn-lg">🌐 Official Website</a>
+        <a id="hm-map-btn" href="#" target="_blank" rel="noopener" class="btn btn-green btn-lg">📍 Google Maps</a>
+        <button class="btn btn-navy btn-lg" onclick="closeModal('hotelModal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// REAL ADDIS ABABA HOTEL DATA
+// ═══════════════════════════════════════════
+const hotels = [
+  {
+    id: 1,
+    name: "Sheraton Addis",
+    stars: 5,
+    badge: "Luxury",
+    badgeClass: "badge-luxury",
+    category: "luxury",
+    location: "Taitu Street, Kazanchis, Addis Ababa",
+    district: "Kazanchis",
+    // Real Marriott/Sheraton Addis image (publicly available press image URL)
+    image: "https://images.trvl-media.com/lodging/1000000/970000/963400/963388/9e0fd68f.jpg",
+    imageFallback: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Sheraton_Addis_exterior.jpg/800px-Sheraton_Addis_exterior.jpg",
+    desc: "One of Africa's most celebrated hotels, the Sheraton Addis has been welcoming heads of state and discerning travelers since 1998. Set on 23 lush acres, it features cascading pools, award-winning restaurants, and impeccable service that defines Addis Ababa's luxury hospitality scene.",
+    shortDesc: "Africa's landmark luxury hotel set on 23 acres with cascading pools.",
+    website: "https://www.marriott.com/en-us/hotels/addwa-sheraton-addis/overview/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sheraton+Addis+Hotel+Addis+Ababa&query_place_id=ChIJbYaYH_0tOBERvXDPw2PMCkA",
+    prices: [
+      { room: "Deluxe Room", cat: "Room", price: "12,500 ETB" },
+      { room: "Executive Suite", cat: "Suite", price: "28,000 ETB" },
+      { room: "Presidential Suite", cat: "Suite", price: "95,000 ETB" },
+      { room: "Breakfast Buffet", cat: "Dining", price: "1,800 ETB" },
+      { room: "Spa Treatment", cat: "Service", price: "3,500 ETB" },
+    ],
+    amenities: ["5 Restaurants", "3 Outdoor Pools", "Spa & Fitness", "Tennis Courts", "Business Centre", "Casino", "Concierge", "Airport Transfer", "Free WiFi", "Valet Parking"]
+  },
+  {
+    id: 2,
+    name: "Hilton Addis Ababa",
+    stars: 5,
+    badge: "Luxury",
+    badgeClass: "badge-luxury",
+    category: "luxury",
+    location: "Menelik II Avenue, Piassa, Addis Ababa",
+    district: "Piassa",
+    image: "https://www.hilton.com/im/en/ADDABHF/14312754/addabhf-outdoor-pool-1.jpg?impolicy=crop&cw=5000&ch=3333&gravity=NorthWest&xposition=0&yposition=0&rw=768&rh=512",
+    imageFallback: "https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&q=80",
+    desc: "Perched in the heart of Addis Ababa since 1969, the Hilton Addis Ababa is an institution. Its iconic circular tower overlooks lush gardens and an Olympic-sized pool. With five dining outlets, a world-class spa, and proximity to government institutions and embassies, it remains the address of choice for diplomats and international visitors.",
+    shortDesc: "Iconic circular tower hotel in Piassa — diplomats' address since 1969.",
+    website: "https://www.hilton.com/en/hotels/addabhf-hilton-addis-ababa/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Hilton+Addis+Ababa+Menelik+II+Avenue",
+    prices: [
+      { room: "King Guest Room", cat: "Room", price: "11,200 ETB" },
+      { room: "Garden View Room", cat: "Room", price: "13,500 ETB" },
+      { room: "Executive Lounge Room", cat: "Room", price: "16,000 ETB" },
+      { room: "Pool Access", cat: "Service", price: "800 ETB" },
+      { room: "Airport Shuttle", cat: "Service", price: "1,200 ETB" },
+    ],
+    amenities: ["Olympic Pool", "5 Restaurants & Bars", "Full Spa", "Tennis", "Casino", "Business Centre", "Airport Shuttle", "Kids Club", "Free WiFi", "Currency Exchange"]
+  },
+  {
+    id: 3,
+    name: "Hyatt Regency Addis Ababa",
+    stars: 5,
+    badge: "Luxury",
+    badgeClass: "badge-luxury",
+    category: "luxury",
+    location: "Bole Road, Bole, Addis Ababa",
+    district: "Bole",
+    image: "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2017/03/27/1349/Hyatt-Regency-Addis-Ababa-P016-Exterior.jpg/Hyatt-Regency-Addis-Ababa-P016-Exterior.16x9.jpg",
+    imageFallback: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80",
+    desc: "Opened in 2018, the Hyatt Regency Addis Ababa brings modern international luxury to the Bole business district. Its 320 rooms are styled with a blend of Ethiopian artistry and contemporary comfort. The rooftop bar and all-day dining restaurant offer stunning panoramic views of the capital.",
+    shortDesc: "Modern 320-room luxury in Bole with Ethiopian artistry and rooftop views.",
+    website: "https://www.hyatt.com/hyatt-regency/en-US/addra-hyatt-regency-addis-ababa",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Hyatt+Regency+Addis+Ababa+Bole",
+    prices: [
+      { room: "Standard King", cat: "Room", price: "10,800 ETB" },
+      { room: "Regency Club Room", cat: "Room", price: "14,500 ETB" },
+      { room: "Junior Suite", cat: "Suite", price: "22,000 ETB" },
+      { room: "Rooftop Dinner", cat: "Dining", price: "2,200 ETB" },
+      { room: "Fitness & Pool", cat: "Service", price: "Free for guests" },
+    ],
+    amenities: ["Rooftop Bar", "Rooftop Pool", "All-Day Dining", "Spa & Wellness", "Gym", "Business Centre", "Meeting Rooms", "Valet", "Free WiFi", "EV Charging"]
+  },
+  {
+    id: 4,
+    name: "Radisson Blu Hotel, Addis Ababa",
+    stars: 5,
+    badge: "Business",
+    badgeClass: "badge-business",
+    category: "business",
+    location: "Bole Medhanealem, Bole, Addis Ababa",
+    district: "Bole",
+    image: "https://www.radissonhotels.com/content/dam/radisson/property-images/hotels/ethiopia/addis-ababa/radisson-blu-hotel-addis-ababa/exterior/rbh-addis-ababa-exterior-day-1.jpg",
+    imageFallback: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80",
+    desc: "The Radisson Blu Hotel stands as Addis Ababa's premier business hotel, located in the vibrant Bole district close to major embassies and corporate headquarters. Its 264 rooms blend warm African aesthetics with cutting-edge business facilities, making it the top choice for international executives.",
+    shortDesc: "Premier business hotel in Bole with 264 rooms near embassies and corporates.",
+    website: "https://www.radissonhotels.com/en-us/hotels/radisson-blu-addis-ababa",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Radisson+Blu+Hotel+Addis+Ababa+Bole",
+    prices: [
+      { room: "Superior Room", cat: "Room", price: "9,500 ETB" },
+      { room: "Business Class Room", cat: "Room", price: "11,800 ETB" },
+      { room: "Junior Suite", cat: "Suite", price: "19,500 ETB" },
+      { room: "Meeting Room (half day)", cat: "Business", price: "8,000 ETB" },
+      { room: "Airport Pick-Up", cat: "Service", price: "1,500 ETB" },
+    ],
+    amenities: ["Outdoor Pool", "Atelier Restaurant", "Sky Bar", "Full Spa", "24hr Gym", "8 Meeting Rooms", "Business Lounge", "Dry Cleaning", "Free WiFi", "Concierge"]
+  },
+  {
+    id: 5,
+    name: "Ethiopian Skylight Hotel",
+    stars: 5,
+    badge: "Airport",
+    badgeClass: "badge-airport",
+    category: "airport",
+    location: "Bole International Airport Area, Addis Ababa",
+    district: "Bole (Airport)",
+    image: "https://ethiopianskylighthotel.com/wp-content/uploads/2019/11/DSC_4861.jpg",
+    imageFallback: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80",
+    desc: "Owned and operated by Ethiopian Airlines, the Skylight Hotel is connected directly to Bole International Airport by a covered walkway — the only hotel in Ethiopia with this convenience. Its 373 rooms, multiple pools, and world-class facilities make it the undisputed gateway hotel for travelers transiting through Addis Ababa.",
+    shortDesc: "Directly connected to Bole Airport — the ultimate transit & arrival hotel.",
+    website: "https://www.ethiopianskylighthotel.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Ethiopian+Skylight+Hotel+Addis+Ababa+Airport",
+    prices: [
+      { room: "Classic Room", cat: "Room", price: "8,800 ETB" },
+      { room: "Business Room", cat: "Room", price: "11,500 ETB" },
+      { room: "Sky Suite", cat: "Suite", price: "24,000 ETB" },
+      { room: "Day Use Room (6hrs)", cat: "Room", price: "4,200 ETB" },
+      { room: "Airport Connection", cat: "Service", price: "Free" },
+    ],
+    amenities: ["Airport Walkway Access", "3 Outdoor Pools", "6 Restaurants", "Health Club & Spa", "Ethiopian Airlines Desk", "Business Centre", "Day Use Rooms", "Free WiFi", "Gift Shops", "Forex"]
+  },
+  {
+    id: 6,
+    name: "Golden Tulip Addis Ababa",
+    stars: 4,
+    badge: "Business",
+    badgeClass: "badge-business",
+    category: "business",
+    location: "Wollo Sefer, Bole Sub-City, Addis Ababa",
+    district: "Wollo Sefer",
+    image: "https://goldentulipaddisababa.com/wp-content/uploads/2017/04/GT-ADDIS-007_A4_7R3A8836-768x512.jpg",
+    imageFallback: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80",
+    desc: "Golden Tulip Addis Ababa offers a refreshing blend of contemporary design and warm Ethiopian hospitality in the busy Wollo Sefer district. With 127 well-appointed rooms, a rooftop pool offering city panoramas, and multiple dining options, it punches well above its four-star category.",
+    shortDesc: "Contemporary 4-star with rooftop pool and city panoramas in Wollo Sefer.",
+    website: "https://goldentulipaddisababa.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Golden+Tulip+Hotel+Addis+Ababa+Wollo+Sefer",
+    prices: [
+      { room: "Standard Room", cat: "Room", price: "6,800 ETB" },
+      { room: "Superior Room", cat: "Room", price: "8,200 ETB" },
+      { room: "Junior Suite", cat: "Suite", price: "14,500 ETB" },
+      { room: "Rooftop Pool Access", cat: "Service", price: "400 ETB" },
+      { room: "Full Board", cat: "Dining", price: "3,500 ETB" },
+    ],
+    amenities: ["Rooftop Pool", "City View Restaurant", "Bar & Lounge", "Gym", "Conference Rooms", "Laundry", "24hr Reception", "Free WiFi", "Parking", "Concierge"]
+  },
+  {
+    id: 7,
+    name: "Jupiter International Hotel – Bole",
+    stars: 4,
+    badge: "Business",
+    badgeClass: "badge-business",
+    category: "business",
+    location: "Bole Road near Bole Bridge, Bole, Addis Ababa",
+    district: "Bole",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
+    desc: "Jupiter International Hotel is one of Ethiopia's most established hospitality brands with multiple Addis Ababa properties. The Bole branch is a stylish four-star hotel frequented by business travelers, NGO professionals, and regional delegates for its reliable service, generous rooms, and well-equipped conference facilities.",
+    shortDesc: "Established Ethiopian brand — reliable 4-star in the Bole business corridor.",
+    website: "https://www.jupiterinternationalhotel.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Jupiter+International+Hotel+Bole+Addis+Ababa",
+    prices: [
+      { room: "Standard Room", cat: "Room", price: "5,500 ETB" },
+      { room: "Deluxe Room", cat: "Room", price: "7,200 ETB" },
+      { room: "Suite", cat: "Suite", price: "13,000 ETB" },
+      { room: "Conference (full day)", cat: "Business", price: "12,000 ETB" },
+      { room: "Breakfast", cat: "Dining", price: "850 ETB" },
+    ],
+    amenities: ["Outdoor Pool", "Restaurant & Bar", "Conference Hall", "Business Centre", "Free WiFi", "Gym", "Airport Transfer", "Room Service", "Parking", "Laundry"]
+  },
+  {
+    id: 8,
+    name: "Sapphire Addis Hotel",
+    stars: 4,
+    badge: "Boutique",
+    badgeClass: "badge-boutique",
+    category: "boutique",
+    location: "CMC Road, Kolfe Keranio, Addis Ababa",
+    district: "CMC",
+    image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80",
+    desc: "Sapphire Addis Hotel is a charming boutique property that celebrates Ethiopian art, culture, and craftsmanship in every corner. Local artworks, handwoven textiles, and indigenous wooden furniture create an immersive cultural atmosphere. The rooftop terrace café is a popular sunset spot among Addis locals and visitors alike.",
+    shortDesc: "Culture-first boutique hotel celebrating Ethiopian art and craftsmanship.",
+    website: "https://www.sapphireaddis.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Sapphire+Addis+Hotel+CMC+Addis+Ababa",
+    prices: [
+      { room: "Cultural Room", cat: "Room", price: "4,200 ETB" },
+      { room: "Art Suite", cat: "Suite", price: "7,800 ETB" },
+      { room: "Rooftop Dinner", cat: "Dining", price: "1,200 ETB" },
+      { room: "Cultural Tour", cat: "Activity", price: "1,500 ETB" },
+      { room: "Traditional Coffee", cat: "Service", price: "180 ETB" },
+    ],
+    amenities: ["Rooftop Café", "Ethiopian Art Gallery", "Cultural Evenings", "Traditional Coffee Ceremony", "Free WiFi", "Garden", "Gift Shop", "Tour Desk", "Room Service", "Parking"]
+  }
+];
+
+// ─── RENDER ────────────────────────────────────
+let activeFilter = 'all';
+
+function renderHotels(list) {
+  const grid = document.getElementById('hotelsGrid');
+  if (!list.length) {
+    grid.innerHTML = `<p style="color:var(--slate);grid-column:1/-1;text-align:center;padding:4rem 0;font-size:1rem">No hotels found. Try a different search term.</p>`;
+    return;
+  }
+  grid.innerHTML = list.map(h => `
+    <div class="hotel-card" onclick="openHotel(${h.id})">
+      <div class="hotel-img-wrap">
+        <img class="hotel-card-img" 
+             src="${h.image}" 
+             alt="${h.name}" 
+             loading="lazy"
+             onerror="this.src='${h.imageFallback || 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80'}'" />
+        <span class="hotel-badge ${h.badgeClass}">${h.badge}</span>
+        <span class="stars-wrap">${'★'.repeat(h.stars)} ${h.stars}.0</span>
+      </div>
+      <div class="hotel-card-body">
+        <div class="hotel-name">${h.name}</div>
+        <div class="hotel-location">📍 ${h.location}</div>
+        <div class="hotel-desc-preview">${h.shortDesc}</div>
+        <div class="hotel-card-footer">
+          <div class="hotel-price">From <strong>${h.prices[0].price}</strong><sup>/night</sup></div>
+          <div class="card-actions">
+            <button class="btn btn-gold btn-sm">Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterHotels() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  let list = hotels;
+  if (activeFilter !== 'all') list = list.filter(h => h.category === activeFilter);
+  if (q) list = list.filter(h => h.name.toLowerCase().includes(q) || h.location.toLowerCase().includes(q) || (h.district||'').toLowerCase().includes(q));
+  renderHotels(list);
+}
+
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  filterHotels();
+}
+
+// ─── HOTEL MODAL ───────────────────────────────
+function openHotel(id) {
+  const h = hotels.find(x => x.id === id);
+  if (!h) return;
+  const img = document.getElementById('hm-img');
+  img.src = h.image;
+  img.onerror = () => { img.src = h.imageFallback || 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80'; };
+  img.alt = h.name;
+  document.getElementById('hm-stars').textContent = '★'.repeat(h.stars) + '☆'.repeat(5 - h.stars) + `  ${h.stars}-Star Hotel`;
+  document.getElementById('hm-name').textContent = h.name;
+  document.getElementById('hm-location').textContent = h.location;
+  document.getElementById('hm-desc').textContent = h.desc;
+  document.getElementById('hm-prices').innerHTML = h.prices.map(p => `
+    <tr>
+      <td>${p.room}</td>
+      <td><span style="font-size:0.76rem;color:var(--slate);background:var(--ivory);padding:0.2rem 0.5rem;border-radius:4px">${p.cat}</span></td>
+      <td>${p.price}</td>
+    </tr>
+  `).join('');
+  document.getElementById('hm-amenities').innerHTML = h.amenities.map(a => `<span class="amenity-tag">${a}</span>`).join('');
+  document.getElementById('hm-website-btn').href = h.website;
+  document.getElementById('hm-map-btn').href = h.mapUrl;
+  openModal('hotelModal');
+}
+
+// ─── MODAL UTILS ───────────────────────────────
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-backdrop').forEach(b => {
+  b.addEventListener('click', e => {
+    if (e.target === b) { b.classList.remove('active'); document.body.style.overflow = ''; }
+  });
+});
+
+// ─── MOBILE MENU ───────────────────────────────
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+// ─── CONTACT ───────────────────────────────────
+function submitContact() { showToast('✅ Message sent! We\'ll reply within 24 hours.'); }
+
+// ─── TOAST ─────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  const item = document.createElement('div');
+  item.className = 'toast-item';
+  item.textContent = msg;
+  t.appendChild(item);
+  setTimeout(() => item.remove(), 4200);
+}
+
+// ─── INIT ──────────────────────────────────────
+renderHotels(hotels);
+</script>
+</body>
+</html>
